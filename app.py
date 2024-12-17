@@ -1,6 +1,6 @@
 from subprocess import DEVNULL, Popen
 from requests import Session
-import yaml
+import yaml, os
 
 def get_file_status_symbol(status: str):
     if status == "added":
@@ -101,11 +101,14 @@ def main():
     _, _, repo_name = uri.split("/", 3)
     out_name = f'{repo_name}@{tag}'
 
-    with open(f"{out_name}.puml", "w") as file:
+    if not os.path.exists("out"):
+        os.mkdir("out")
+
+    with open(f"out/{out_name}.puml", "w") as file:
         file.write(uml)
 
     if executable:
-        proc = Popen(f"java -DPLANTUML_LIMIT_SIZE=102400 -jar {executable} ./", stdout=DEVNULL)
+        proc = Popen(f"java -DPLANTUML_LIMIT_SIZE=102400 -jar {executable} ./out", stdout=DEVNULL)
         proc.wait()
 
 
