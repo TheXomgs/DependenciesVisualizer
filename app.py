@@ -40,12 +40,18 @@ def get_dependencies(repo_url: str, tag: str, depth: int=100, token: str=None):
         print(req.content)
         return None
     
-    commits = (commit for commit in req.json())
+    commits = req.json()
+    gen_commits = (commit for commit in req.json())
     
+    if len(commits) > 1:
+        prev_commit = next(gen_commits)
+    else:
+        prev_commit = {"sha": "BASE"}
+
     dependencies = []
-    prev_commit = next(commits)
-    for commit in commits:
+    for commit in gen_commits:
         req = s.get(f'https://api.{registry}/repos/{owner}/{repo}/compare/{commit["sha"]}...{prev_commit["sha"]}')
+
         if not req:
             continue
         
