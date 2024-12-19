@@ -78,6 +78,7 @@ SHA1 --> repo
 ```bash
 pytest ./
 ```
+![Скриншот тестов](https://github.com/TheXomgs/DependenciesVisualizer/blob/main/2.jpg?raw=true)
 
 ## Зависимости
 - Python 3.12+
